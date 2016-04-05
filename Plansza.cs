@@ -38,7 +38,7 @@ public class Plansza : MonoBehaviour {
 
         for (int x=1; x<kolumny-1;x++)
         {
-            for (y=1; y<wiersze-1;y++)
+            for (int y=1; y<wiersze-1;y++)
             {
                 gridPositions.Add(new Vector3(x, y, 0f));
             }
@@ -48,16 +48,52 @@ public class Plansza : MonoBehaviour {
     void BoardSetup()
     {
         boardHolder = new GameObject("Plansza").transform;
+        for (int x=-1;x<kolumny+1;x++)
+        {
+            for (int y=-1;y<wiersze+1;y++)
+            {
+                GameObject toInstantiate = podloga[Random.Range(0, podloga.Length)];
+                if (x == -1 || x == kolumny || y == -1 || y == wiersze)
+                    toInstantiate = zewSciany[Random.Range(0, zewSciany.Length)];
 
+                GameObject instace = Instantiate(toInstantiate, new Vector3(x, y, 0f), Quaternion.identity) as GameObject;
+
+                instace.transform.SetParent(boardHolder);
+
+            }
+        }
 
     }
-    // Use this for initialization
-    void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+
+    Vector3 Polozenie()
+    {
+        int losowe = Random.Range(0, gridPositions.Count);
+        Vector3 polozenie = gridPositions[losowe];
+        gridPositions.RemoveAt(losowe);
+        return polozenie;
+
+    }
+
+    void Ulozenie(GameObject[] tileArray,int minimum, int maximum)
+    {
+        int ile = Random.Range(minimum, maximum + 1);
+        for (int i = 0; i < ile; i++) ;
+        {
+            Vector3 polozenie = Polozenie();
+            GameObject ulozenie = tileArray[Random.Range(0, tileArray.Length)];
+            Instantiate(ulozenie, polozenie, Quaternion.identity);
+        }
+    }
+
+    public void Tworzenie()
+    {
+        BoardSetup();
+        InitializeList();
+        Ulozenie(sciana, IleScian.minimum, IleScian.maximum);
+        Ulozenie(kasa, IleKasy.minimum, IleKasy.maximum);
+        int ileWrogow = (int)Mathf.Log(level, 2f);
+        Ulozenie(wrogowie, ileWrogow, ileWrogow);
+        Instantiate(przejscie, new Vector3(kolumny - 1, wiersze - 1, 0f), Quaternion.identity);
+    }
+    
 }
