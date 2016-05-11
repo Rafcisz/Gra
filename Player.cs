@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 namespace Completed
 {
@@ -9,8 +10,8 @@ namespace Completed
         public float restartLevelDelay = 1f;        
         public int pointsKasa = 10;             
         public int pointsKlejnoty = 20;              
-        public int wallDamage = 1;                  
-
+        public int wallDamage = 1;
+        public Text MoneyText;
 
         private Animator animator;                  
         private int cash;                          
@@ -20,6 +21,7 @@ namespace Completed
            
             animator = GetComponent<Animator>();
             cash = GameManager.instance.playerCashPoints;
+            MoneyText.text = "Money: " + cash;
             base.Start();
         }
 
@@ -53,6 +55,7 @@ namespace Completed
         protected override void AttemptMove<T>(int xDir, int yDir)
         {
             cash--;
+            MoneyText.text = "Money: " + cash;
             base.AttemptMove<T>(xDir, yDir);
             RaycastHit2D hit;
 
@@ -90,12 +93,14 @@ namespace Completed
             else if (other.tag == "Kasa")
             {
                 cash += pointsKasa;
+                MoneyText.text = "+" + pointsKasa + " Money: " + cash;
                 other.gameObject.SetActive(false);
             }
 
             else if (other.tag == "Klejnoty")
             {
                 cash += pointsKlejnoty;
+                MoneyText.text = "+" + pointsKlejnoty + " Money: " + cash;
                 other.gameObject.SetActive(false);
             }
         }
@@ -104,6 +109,7 @@ namespace Completed
         {
             animator.SetTrigger("GraczHit");
             cash -= loss;
+            MoneyText.text = "-" + loss + " Money: " + cash;
             CheckIfGameOver();
         }
 
