@@ -46,7 +46,7 @@ namespace Completed
 
         public void GameOver()
         {
-            levelText.text = "You pass " + level + "floors";
+            levelText.text = "You pass " + level + " floors";
             levelImage.SetActive(true);
             enabled = false;
         }

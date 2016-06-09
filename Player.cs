@@ -12,6 +12,9 @@ namespace Completed
         public int pointsKlejnoty = 20;              
         public int wallDamage = 1;
         public Text MoneyText;
+        public AudioClip moveSound1;
+        public AudioClip moveSound2;
+        public AudioClip gameOverSound;
 
         private Animator animator;                  
         private int cash;                          
@@ -57,11 +60,12 @@ namespace Completed
             cash--;
             MoneyText.text = "Money: " + cash;
             base.AttemptMove<T>(xDir, yDir);
+
             RaycastHit2D hit;
 
             if (Move(xDir, yDir, out hit))
             {
-
+                SoundManager.instance.RandomizeSfx(moveSound1, moveSound2);
             }
 
             CheckIfGameOver();
@@ -117,8 +121,8 @@ namespace Completed
         {
             if (cash <= 0)
             {
-
-                //Call the GameOver function of GameManager.
+                SoundManager.instance.PlaySingle(gameOverSound);
+                SoundManager.instance.musicSource.Stop();
                 GameManager.instance.GameOver();
             }
         }

@@ -11,7 +11,9 @@ namespace Completed
 
         private Animator animator;                          
         private Transform target;                           
-        private bool skipMove;                              
+        private bool skipMove;
+        public AudioClip enemyAttack1;
+        public AudioClip enemyAttack2;
 
         protected override void Start()
         {
@@ -69,6 +71,7 @@ namespace Completed
             Player hitPlayer = component as Player;
             animator.SetTrigger("enemyAttack");
             hitPlayer.LoseCash(playerDamage);
+            SoundManager.instance.RandomizeSfx(enemyAttack1, enemyAttack2);
         }
     }
 }
